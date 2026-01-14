@@ -1,0 +1,336 @@
+/* --- VARIABLES DE COLOR --- */
+:root {
+    --color-primary: #ff4d5a;    /* Rojo/Coral */
+    --color-dark-blue: #1a2b4c;  /* Azul oscuro */
+    --color-darker: #121f38;     /* Azul más oscuro */
+    --bs-primary: var(--color-primary); 
+    --bs-dark: var(--color-dark-blue);
+}
+
+/* --- OPTIMIZACIÓN DE IMÁGENES --- */
+img {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+    -webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+/* --- FUENTES Y BASE --- */
+body {
+    font-family: 'Open Sans', sans-serif;
+    color: #6c757d;
+    overflow-x: hidden; 
+}
+h1, h2, h3, h4, h5, h6, .navbar-brand, .btn {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+/* --- SECCIONES GENERALES --- */
+.page-section {
+    padding: 6rem 0;
+}
+.section-heading {
+    font-size: 2.5rem;
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: var(--color-dark-blue);
+}
+.section-subheading {
+    font-size: 1rem;
+    font-weight: 400;
+    font-style: italic;
+    font-family: 'Droid Serif', serif;
+    margin-bottom: 4rem;
+}
+.heading-underline {
+    width: 50px;
+    height: 3px;
+    background-color: var(--color-primary);
+    margin-bottom: 1.5rem;
+}
+
+/* --- NAVBAR (MENÚ) --- */
+#mainNav {
+    padding-top: 1rem; 
+    padding-bottom: 1rem;
+    border: none;
+    background-color: var(--color-dark-blue); /* Fondo base para evitar transparencia rara en móvil */
+    transition: all 0.3s ease-in-out;
+}
+
+/* Estilo general del Logo */
+.navbar-brand {
+    font-size: 1.8rem;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-right: 0; /* Reseteo de márgenes */
+}
+.navbar-brand img {
+    height: 50px;
+    width: auto;
+}
+
+/* Estilo de los enlaces del menú */
+#mainNav .navbar-nav .nav-item .nav-link {
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: rgba(255, 255, 255, 1);
+    padding: 0.8rem 1.2rem;
+    text-transform: uppercase;
+    text-shadow: 0px 2px 4px rgba(0,0,0,0.5);
+}
+#mainNav .navbar-nav .nav-item .nav-link:hover,
+#mainNav .navbar-nav .nav-item .nav-link.active {
+    color: var(--color-primary);
+}
+
+/* --- ESTILOS ADICIONALES PARA ESCRITORIO (PC - min-width 992px) --- */
+@media (min-width: 992px) {
+    #mainNav {
+        padding-top: 1.5rem;
+        padding-bottom: 1.5rem;
+        background-color: transparent; /* Transparente al inicio en PC */
+    }
+    
+    /* Cuando se hace scroll y el menú se achica */
+    #mainNav.navbar-shrink {
+        background-color: var(--color-dark-blue);
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+    }
+
+    /* Logo más grande en PC */
+    .navbar-brand img {
+        height: 70px; 
+    }
+    .navbar-brand {
+        font-size: 2.2rem;
+    }
+
+    /* Ajuste de enlaces en PC */
+    #mainNav .navbar-nav .nav-item .nav-link {
+        font-size: 1.1rem;
+        padding: 1rem 1.2rem;
+    }
+
+    /* Cards de cabañas con imágenes más grandes en PC */
+    .card-cabana .carousel-inner {
+        height: 400px;
+    }
+    .card-cabana .carousel-item img {
+        height: 400px;
+        image-rendering: auto;
+        filter: contrast(1.05) brightness(1.02);
+    }
+    
+    /* Servicios con mejor renderizado */
+    #serviciosFotos .carousel-item img {
+        height: 600px;
+        filter: contrast(1.05) brightness(1.02);
+    }
+}
+
+/* --- CORRECCIÓN TÍTULOS TAPADOS (Para Cabañas y Galería) --- */
+/* Esta clase controla el espacio superior para que el menú no tape el título */
+.header-pt {
+    margin-top: 0 !important;
+    padding-top: 150px !important; /* Altura para Celulares */
+}
+@media (min-width: 992px) {
+    .header-pt {
+        padding-top: 220px !important; /* Altura para PC (Menú más alto) */
+    }
+}
+
+/* --- HERO (HOME) --- */
+.masthead {
+    position: relative;
+    background-color: var(--color-dark-blue);
+    height: 100vh;
+    min-height: 600px;
+}
+#heroCarousel, .carousel-inner, .carousel-item {
+    height: 100%;
+}
+.carousel-item {
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.carousel-item::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-color: rgba(26, 43, 76, 0.4); 
+}
+.carousel-caption {
+    z-index: 2;
+    top: 50%;
+    transform: translateY(-50%);
+    bottom: auto;
+}
+.carousel-caption h1 {
+    font-size: 3.5rem; 
+    margin-bottom: 1.5rem;
+}
+/* Título más grande en PC */
+@media (min-width: 992px) {
+    .carousel-caption h1 { 
+        font-size: 4.5rem; 
+    }
+}
+
+/* --- SECCIÓN SERVICIOS (LISTA DERECHA) --- */
+.service-list-fixed li {
+    font-size: 1.2rem;
+    color: var(--color-dark-blue);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+.service-list-fixed li i {
+    font-size: 1.4rem;
+    width: 35px;
+    text-align: center;
+    color: var(--color-primary);
+    margin-right: 15px;
+}
+#serviciosFotos .carousel-item img {
+    height: 500px;
+    object-fit: cover;
+    width: 100%;
+    image-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* --- CARDS CABAÑAS --- */
+.card-cabana {
+    border: none;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+    height: 100%;
+    background: #fff;
+}
+.card-cabana:hover {
+    transform: translateY(-5px);
+}
+.card-cabana .carousel-inner {
+    height: 300px;
+}
+.card-cabana .carousel-item img {
+    height: 300px;
+    object-fit: cover;
+    width: 100%;
+    cursor: pointer;
+    image-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transform: translateZ(0);
+    will-change: transform;
+}
+.card-cabana-title {
+    font-size: 1.8rem;
+    color: var(--color-dark-blue);
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+}
+.card-cabana-text {
+    font-size: 1.1rem;
+    color: #555;
+    margin-bottom: 1.5rem;
+}
+
+/* --- TESTIMONIOS --- */
+.testimonials {
+    background-color: var(--color-dark-blue) !important;
+}
+.testimonial-simple {
+    max-width: 800px;
+    margin: 0 auto;
+    border-left: 5px solid var(--color-primary);
+    padding-left: 25px;
+    text-align: left;
+}
+.testimonial-simple p {
+    font-size: 1.4rem;
+    font-style: italic;
+    margin-bottom: 1.5rem;
+    color: rgba(255,255,255,0.9);
+}
+.testimonial-author {
+    color: var(--color-primary);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+}
+
+/* --- BOTONES Y FOOTER --- */
+.btn-primary {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    padding: 1rem 2rem;
+    font-weight: 800;
+}
+.btn-primary:hover {
+    background-color: #e63e4b;
+    border-color: #e63e4b;
+}
+.btn-outline-dark {
+    border-color: var(--color-dark-blue);
+    color: var(--color-dark-blue);
+    border-radius: 0;
+    padding: 0.8rem 1.8rem;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+.btn-outline-dark:hover {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    color: white;
+}
+.footer {
+    background-color: var(--color-dark-blue);
+    color: rgba(255, 255, 255, 0.7);
+}
+.footer-links a { 
+    color: rgba(255,255,255,0.5); 
+    text-decoration: none; 
+}
+.footer-links a:hover { 
+    color: var(--color-primary); 
+}
+.bg-darker { 
+    background-color: var(--color-darker); 
+}
+.btn-social {
+    width: 40px; 
+    height: 40px;
+    display: inline-flex; 
+    align-items: center; 
+    justify-content: center;
+    border-radius: 50%;
+    color: white;
+    border: 1px solid rgba(255,255,255,0.3);
+}
+.btn-social:hover {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+/* --- MEDIA QUERIES (MÓVIL PEQUEÑO) --- */
+@media (max-width: 768px) {
+    #serviciosFotos .carousel-item img { 
+        height: 300px; 
+    }
+}
