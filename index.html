@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -10,6 +9,17 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="styles.css" rel="stylesheet">
+    <style>
+        /* Estilos inline extra para asegurar que los links del footer se vean bien */
+        .footer-contact-link {
+            color: inherit; /* Hereda el color del texto (blanco/gris) */
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .footer-contact-link:hover {
+            color: #ffc107; /* Cambia de color al pasar el mouse (opcional) */
+        }
+    </style>
 </head>
 <body id="page-top">
 
@@ -197,10 +207,22 @@
                 <div class="col-lg-4">
                     <h4 class="text-uppercase mb-4 text-white">Contacto</h4>
                     <p class="mb-2"><i class="fas fa-map-marker-alt me-3 text-primary"></i>C. Pincolini 2948, Luján de Cuyo</p>
-                    <p class="mb-2"><i class="fab fa-whatsapp me-3 text-primary"></i>+54 9 261 123 4567</p>
+                    
+                    <p class="mb-2">
+                        <a href="https://wa.me/5492613665439" target="_blank" class="footer-contact-link">
+                            <i class="fab fa-whatsapp me-3 text-primary"></i>+54 9 261 366 5439
+                        </a>
+                    </p>
+                    
+                    <p class="mb-2">
+                        <a href="https://www.instagram.com/complejo.vista.andes/" target="_blank" class="footer-contact-link">
+                            <i class="fab fa-instagram me-3 text-primary"></i>@complejo.vista.andes
+                        </a>
+                    </p>
+
                     <div class="d-flex mt-3">
-                        <a class="btn btn-social mx-1" href="#!"><i class="fab fa-whatsapp"></i></a>
-                        <a class="btn btn-social mx-1" href="#!"><i class="fab fa-instagram"></i></a>
+                        <a class="btn btn-social mx-1" href="https://wa.me/5492613665439" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                        <a class="btn btn-social mx-1" href="https://www.instagram.com/complejo.vista.andes/" target="_blank"><i class="fab fa-instagram"></i></a>
                     </div>
                 </div>
                 <div class="col-lg-4">
@@ -221,6 +243,7 @@
             </div>
         </div>
     </footer>
+    
     <div class="py-3 bg-darker text-center text-white-50">
         <div class="container"><small>© 2026 Complejo Vista Andes.</small></div>
     </div>
