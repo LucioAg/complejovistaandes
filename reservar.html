@@ -45,10 +45,14 @@
             background-color: #009ee3;
             color: white;
             font-weight: bold;
+            border: none;
+            transition: all 0.3s;
         }
         .btn-mp:hover {
             background-color: #007eb5;
             color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
     </style>
 </head>
@@ -67,15 +71,50 @@
     <div class="container" style="margin-top: 120px; max-width: 900px;">
 
         <div class="form-section text-center">
-            <h1 class="h3">Solicitud de Reserva - Complejo Vista Andes</h1>
-            <p class="text-muted small">Primero verificá la disponibilidad en nuestro calendario y luego completá el formulario.</p>
+            <h1 class="h3 mb-3">Solicitud de Reserva</h1>
             
-            <div class="alert alert-warning mt-3 border-warning">
-                <i class="fas fa-exclamation-triangle me-2"></i><strong>IMPORTANTE:</strong> 
-                Para confirmar la reserva se debe abonar una <strong>seña equivalente al valor de 1 noche</strong>. La fecha solo se bloquea una vez enviado el comprobante de pago por WhatsApp.
+            <div class="alert alert-danger border-danger">
+                <i class="fas fa-exclamation-circle me-2"></i><strong>¡ATENCIÓN! LEER ANTES DE PAGAR</strong><br>
+                Por favor, verificá en el calendario de abajo que tus fechas estén libres (en blanco).<br>
+                <strong>No realices el pago de la seña si el día figura ocupado.</strong>
             </div>
-            
-            <p class="text-muted small mt-2">Si se cancela una reserva el dinero no será devuelto, aunque se le dará la posibilidad de reprogramar la estadía si lo gestiona por WhatsApp 7 días antes del primer día de la reserva.</p>
+
+            <p class="text-muted mb-4">Para confirmar tu reserva es necesario abonar una <strong>seña equivalente al valor de 1 noche</strong>.</p>
+
+            <a href="https://link.mercadopago.com.ar/vistaandes" target="_blank" class="btn btn-mp btn-lg px-5 py-3 shadow mb-3">
+                <i class="fas fa-hand-holding-usd me-2"></i> PAGAR SEÑA CON MERCADO PAGO
+            </a>
+            <p class="small text-muted">Una vez realizado el pago, completá el formulario y envianos el comprobante por WhatsApp.</p>
+        </div>
+
+        <div class="row mb-4 text-center">
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm py-3">
+                    <div class="card-body">
+                        <i class="fas fa-calendar-check fa-2x text-primary mb-2"></i>
+                        <h5 class="card-title">1. Verificá</h5>
+                        <p class="card-text small text-muted">Revisá disponibilidad en el calendario.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm py-3">
+                    <div class="card-body">
+                        <i class="fas fa-credit-card fa-2x text-success mb-2"></i>
+                        <h5 class="card-title">2. Aboná Seña</h5>
+                        <p class="card-text small text-muted">Pagá 1 noche con el botón de arriba.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm py-3">
+                    <div class="card-body">
+                        <i class="fas fa-edit fa-2x text-primary mb-2"></i>
+                        <h5 class="card-title">3. Completá</h5>
+                        <p class="card-text small text-muted">Llená el formulario y enviá comprobante.</p>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="form-section">
@@ -200,35 +239,6 @@
         </div>
 
         <form id="reservaForm">
-            <div class="row mb-4 text-center">
-                <div class="col-md-4">
-                    <div class="card h-100 border-0 shadow-sm py-3">
-                        <div class="card-body">
-                            <i class="fas fa-edit fa-2x text-primary mb-2"></i>
-                            <h5 class="card-title">1. Completá</h5>
-                            <p class="card-text small text-muted">Llená tus datos en este formulario.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card h-100 border-0 shadow-sm py-3">
-                        <div class="card-body">
-                            <i class="fas fa-credit-card fa-2x text-primary mb-2"></i>
-                            <h5 class="card-title">2. Aboná Seña</h5>
-                            <p class="card-text small text-muted">Pagá el valor de 1 noche mediante Mercado Pago.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card h-100 border-0 shadow-sm py-3">
-                        <div class="card-body">
-                            <i class="fab fa-whatsapp fa-2x text-success mb-2"></i>
-                            <h5 class="card-title">3. Confirmá</h5>
-                            <p class="card-text small text-muted">Enviá el comprobante al WhatsApp para finalizar.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <div class="form-section">
                 <div class="mb-3">
@@ -356,29 +366,30 @@
             </div>
 
             <div class="text-center pb-5">
-                <button type="submit" class="btn btn-primary btn-lg w-100" id="btnEnviar">ENVIAR Y CONTINUAR AL PAGO</button>
+                <button type="submit" class="btn btn-primary btn-lg w-100" id="btnEnviar">ENVIAR COMPROBANTE DE PAGO</button>
             </div>
 
         </form>
 
         <div id="mensajeExito" class="form-section text-center d-none">
             <i class="fas fa-check-circle text-success fa-4x mb-3"></i>
-            <h3 class="mb-3">¡Solicitud Enviada!</h3>
+            <h3 class="mb-3">¡Datos Recibidos!</h3>
             
+            <p>Ya recibimos tu formulario.</p>
             <div class="alert alert-info border-info">
-                <strong>¡Falta el último paso!</strong><br>
-                Para congelar la fecha y confirmar tu reserva, por favor aboná la seña y envianos el comprobante.
+                <strong>Último paso:</strong><br>
+                Si ya hiciste el pago, por favor enviá el comprobante por WhatsApp para que podamos bloquear la fecha.
             </div>
 
             <div class="d-grid gap-3 col-md-8 mx-auto mt-4">
-                <a href="https://link.mercadopago.com.ar/vistaandes" target="_blank" class="btn btn-mp btn-lg py-3 shadow">
-                    <i class="fas fa-hand-holding-usd me-2"></i> ABONAR SEÑA (Mercado Pago)
-                </a>
-                
                 <a href="https://wa.me/5492613665439" target="_blank" class="btn btn-success btn-lg py-3 shadow">
-                    <i class="fab fa-whatsapp me-2"></i> ENVIAR COMPROBANTE AL WHATSAPP
+                    <i class="fab fa-whatsapp me-2"></i> ENVIAR COMPROBANTE AHORA
                 </a>
             </div>
+            
+            <hr class="my-4">
+            <a href="index.html" class="btn btn-outline-dark">Volver al Inicio</a>
+        </div>
+    </div>
 
-            <p class="text-muted mt-4 small">Una vez recibido el comprobante, te enviaremos la confirmación definitiva de la reserva.</p>
-        
+    <script src="https://cdn.jsdelivr.net/npm/b
