@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="styles.css" rel="stylesheet">
     <style>
-        /* Estilos extra para parecerse al Form de Google */
         .form-section {
             background: #fff;
             border-radius: 8px;
@@ -18,41 +17,67 @@
             border-top: 5px solid var(--color-primary);
         }
         .form-label { font-weight: 600; color: #333; }
-        .form-check-label { font-weight: 400; color: #555; }
         .required-star { color: #d93025; margin-left: 3px; }
-
-        /* Estilos para el calendario */
-        .calendar-container {
-            background: #fff;
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-            border: 1px solid #e0e0e0;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-        .calendar-container iframe {
-            border-radius: 8px;
-        }
-
-        /* Tabla de Precios */
-        .pricing-table th { background-color: var(--color-dark-blue); color: white; }
-        .pricing-table td, .pricing-table th { vertical-align: middle; text-align: center; font-size: 0.9rem; }
-        .price-note { font-size: 0.8rem; color: #666; font-style: italic; }
-        .badge-ac { background-color: var(--color-primary); color: white; font-size: 0.75rem; padding: 4px 8px; border-radius: 4px; }
         
-        /* Boton Mercado Pago */
-        .btn-mp {
-            background-color: #009ee3;
-            color: white;
-            font-weight: bold;
-            border: none;
+        /* Tarjetas de Cabañas */
+        .cabin-select-card {
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
             transition: all 0.3s;
+            height: 100%;
+            overflow: hidden;
+            position: relative;
         }
-        .btn-mp:hover {
-            background-color: #007eb5;
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        .cabin-select-card:hover {
+            border-color: var(--color-primary);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .cabin-select-card.selected {
+            border-color: var(--color-primary);
+            background-color: #fff5f6;
+            box-shadow: 0 0 0 4px rgba(255, 77, 90, 0.2);
+        }
+        
+        .cabin-price-tag {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--color-primary);
+        }
+        .cabin-total-nights {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        /* Caja de Pago */
+        .payment-box {
+            background-color: #f8f9fa;
+            border-left: 5px solid #28a745;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        .alias-text {
+            font-family: monospace;
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #333;
+            background: #e9ecef;
+            padding: 5px 10px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+        
+        /* Loader de búsqueda */
+        .searching-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(255,255,255,0.8);
+            z-index: 10;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
         }
     </style>
 </head>
@@ -68,328 +93,414 @@
         </div>
     </nav>
 
-    <div class="container" style="margin-top: 120px; max-width: 900px;">
-
-        <div class="form-section text-center">
-            <h1 class="h3 mb-3">Solicitud de Reserva</h1>
-            
-            <div class="alert alert-danger border-danger">
-                <i class="fas fa-exclamation-circle me-2"></i><strong>¡ATENCIÓN! LEER ANTES DE PAGAR</strong><br>
-                Por favor, verificá en el calendario de abajo que tus fechas estén libres (en blanco).<br>
-                <strong>No realices el pago de la seña si el día figura ocupado.</strong>
-            </div>
-
-            <p class="text-muted mb-4">Para confirmar tu reserva es necesario abonar una <strong>seña equivalente al valor de 1 noche</strong>.</p>
-
-            <a href="https://link.mercadopago.com.ar/vistaandes" target="_blank" class="btn btn-mp btn-lg px-5 py-3 shadow mb-3">
-                <i class="fas fa-hand-holding-usd me-2"></i> PAGAR SEÑA CON MERCADO PAGO
-            </a>
-            <p class="small text-muted">Una vez realizado el pago, completá el formulario y envianos el comprobante por WhatsApp.</p>
-        </div>
-
-        <div class="row mb-4 text-center">
-            <div class="col-md-4">
-                <div class="card h-100 border-0 shadow-sm py-3">
-                    <div class="card-body">
-                        <i class="fas fa-calendar-check fa-2x text-primary mb-2"></i>
-                        <h5 class="card-title">1. Verificá</h5>
-                        <p class="card-text small text-muted">Revisá disponibilidad en el calendario.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card h-100 border-0 shadow-sm py-3">
-                    <div class="card-body">
-                        <i class="fas fa-credit-card fa-2x text-success mb-2"></i>
-                        <h5 class="card-title">2. Aboná Seña</h5>
-                        <p class="card-text small text-muted">Pagá 1 noche con el botón de arriba.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card h-100 border-0 shadow-sm py-3">
-                    <div class="card-body">
-                        <i class="fas fa-edit fa-2x text-primary mb-2"></i>
-                        <h5 class="card-title">3. Completá</h5>
-                        <p class="card-text small text-muted">Llená el formulario y enviá comprobante.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="form-section">
-            <h3 class="mb-4 text-center text-uppercase fs-5">Tarifas Vigentes</h3>
-            <div class="table-responsive">
-                <table class="table table-bordered pricing-table table-hover">
-                    <thead>
-                        <tr>
-                            <th>Alojamiento</th>
-                            <th>Capacidad</th>
-                            <th>1 Noche (Valor Seña)</th>
-                            <th>2-4 Noches</th>
-                            <th>5-9 Noches</th>
-                            <th>+10 Noches</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td rowspan="2" class="fw-bold text-start">
-                                Cabañas 4, 5, 8<br>
-                                <span class="fw-normal small text-muted">(1 Habitación)</span>
-                            </td>
-                            <td>1-3 pers</td>
-                            <td class="table-info fw-bold">$75.000</td>
-                            <td>$70.000</td>
-                            <td>$65.000</td>
-                            <td>$55.000</td>
-                        </tr>
-                        <tr>
-                            <td>4 pers</td>
-                            <td class="table-info fw-bold">$80.000</td>
-                            <td>$75.000</td>
-                            <td>$70.000</td>
-                            <td>$60.000</td>
-                        </tr>
-
-                        <tr class="table-light">
-                            <td rowspan="2" class="fw-bold text-start">
-                                Cabaña 1 <span class="badge-ac ms-1">Aire Acond.</span><br>
-                                <span class="fw-normal small text-muted">(1 Habitación)</span>
-                            </td>
-                            <td>1-3 pers</td>
-                            <td class="table-info fw-bold">$83.000</td>
-                            <td>$78.000</td>
-                            <td>$73.000</td>
-                            <td>$63.000</td>
-                        </tr>
-                        <tr class="table-light">
-                            <td>4 pers</td>
-                            <td class="table-info fw-bold">$88.000</td>
-                            <td>$83.000</td>
-                            <td>$78.000</td>
-                            <td>$68.000</td>
-                        </tr>
-
-                        <tr>
-                            <td rowspan="2" class="fw-bold text-start">
-                                Cabañas 2, 6, 7<br>
-                                <span class="fw-normal small text-muted">(2 Habitaciones)</span>
-                            </td>
-                            <td>1-3 pers</td>
-                            <td class="table-info fw-bold">$80.000</td>
-                            <td>$75.000</td>
-                            <td>$70.000</td>
-                            <td>$60.000</td>
-                        </tr>
-                        <tr>
-                            <td>4 pers</td>
-                            <td class="table-info fw-bold">$85.000</td>
-                            <td>$80.000</td>
-                            <td>$75.000</td>
-                            <td>$65.000</td>
-                        </tr>
-
-                        <tr class="table-light">
-                            <td rowspan="2" class="fw-bold text-start">
-                                Cabaña 3 <span class="badge-ac ms-1">Aire Acond.</span><br>
-                                <span class="fw-normal small text-muted">(2 Habitaciones)</span>
-                            </td>
-                            <td>1-3 pers</td>
-                            <td class="table-info fw-bold">$88.000</td>
-                            <td>$83.000</td>
-                            <td>$78.000</td>
-                            <td>$68.000</td>
-                        </tr>
-                        <tr class="table-light">
-                            <td>4 pers</td>
-                            <td class="table-info fw-bold">$93.000</td>
-                            <td>$88.000</td>
-                            <td>$83.000</td>
-                            <td>$73.000</td>
-                        </tr>
-
-                        <tr>
-                            <td class="fw-bold text-start">
-                                Deptos 1 y 2<br>
-                                <span class="fw-normal small text-muted">(Loft)</span>
-                            </td>
-                            <td>5-6 pers</td>
-                            <td class="table-info fw-bold">$85.000</td>
-                            <td>$80.000</td>
-                            <td>$75.000</td>
-                            <td>$65.000</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <p class="price-note mt-2">* Precios expresados en Pesos Argentinos.</p>
-        </div>
-
-        <div class="calendar-container">
-            <h3 class="text-center mb-4">
-                <i class="fas fa-calendar-alt me-2" style="color: var(--color-primary);"></i>
-                Calendario de Disponibilidad
-            </h3>
-            <iframe 
-                src="https://calendar.google.com/calendar/embed?src=dfd4678973bf04ba4f307780ed4c03585830dd566917e10466034b80f9e0ed46%40group.calendar.google.com&ctz=America%2FArgentina%2FMendoza&mode=MONTH&showTitle=0&showNav=1&showPrint=0&showTabs=1&showCalendars=0" 
-                style="border: 0; width: 100%; height: 600px;" 
-                frameborder="0" 
-                scrolling="no">
-            </iframe>
+    <div class="container" style="margin-top: 120px; max-width: 1000px;">
+        
+        <div class="text-center mb-5">
+            <h1 class="text-uppercase">Cotizar y Reservar</h1>
+            <p class="lead text-muted">Ingresá tus fechas para ver las cabañas disponibles en tiempo real.</p>
         </div>
 
         <form id="reservaForm">
-
-            <div class="form-section">
-                <div class="mb-3">
-                    <label class="form-label">Nombre y Apellido <span class="required-star">*</span></label>
-                    <input type="text" class="form-control" name="nombre" required placeholder="Tu respuesta">
+            
+            <div class="form-section" id="step2">
+                <h4 class="mb-4"><i class="fas fa-calendar-alt text-primary me-2"></i>Paso 1: Seleccioná tus fechas y pasajeros</h4>
+                
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Fecha de Llegada (Check-in)</label>
+                        <input type="date" class="form-control" name="entrada" id="inputEntrada" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Fecha de Salida (Check-out)</label>
+                        <input type="date" class="form-control" name="salida" id="inputSalida" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Cantidad de Personas</label>
+                        <select class="form-select" name="pax" id="inputPax" required>
+                            <option value="1">1 Persona</option>
+                            <option value="2">2 Personas</option>
+                            <option value="3">3 Personas</option>
+                            <option value="4">4 Personas</option>
+                            <option value="5">5 Personas</option>
+                            <option value="6">6 Personas</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label class="form-label">Teléfono con código de área <span class="required-star">*</span></label>
-                    <input type="tel" class="form-control" name="telefono" required placeholder="Tu respuesta">
+                
+                <div id="alertFechas" class="alert alert-danger mt-3 d-none">
+                    La fecha de salida debe ser posterior a la de entrada.
                 </div>
-                <div class="mb-3">
-                    <label class="form-label">E-mail <span class="required-star">*</span></label>
-                    <input type="email" class="form-control" name="email" required placeholder="Tu respuesta">
-                </div>
-            </div>
-
-            <div class="form-section">
-                <div class="mb-3">
-                    <label class="form-label">Fecha de Llegada (Check-in) <span class="required-star">*</span></label>
-                    <input type="date" class="form-control" name="entrada" required>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Hora de llegada (aprox) <span class="required-star">*</span></label>
-                    <input type="time" class="form-control" name="hora_in" required value="13:00">
-                    <div class="form-text">Check-in regular a partir de las 13:00 HS</div>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Fecha de Salida (Check-out) <span class="required-star">*</span></label>
-                    <input type="date" class="form-control" name="salida" required>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Hora de Salida <span class="required-star">*</span></label>
-                    <input type="time" class="form-control" name="hora_out" required value="10:00">
-                    <div class="form-text">Check-out hasta las 10:00 AM</div>
-                </div>
-            </div>
-
-            <div class="form-section">
-                <div class="mb-3">
-                    <label class="form-label">Cantidad de Personas <span class="required-star">*</span></label>
-                    <input type="number" class="form-control" name="pax" required min="1" max="6">
-                    <div class="form-text">Cabañas hasta 4 pax / Deptos hasta 6 pax.</div>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">¿Viaja con niños? Si es así aclare cuantos <span class="required-star">*</span></label>
-                    <input type="text" class="form-control" name="ninos" required placeholder="Ej: No / Si, 2 niños de 5 y 8 años">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">¿Viaja con mascotas? Aclare número y especie <span class="required-star">*</span></label>
-                    <input type="text" class="form-control" name="mascotas" required placeholder="Ej: No / Si, 1 perro pequeño">
+                
+                <div class="mt-4 text-end">
+                    <button type="button" id="btnBuscar" class="btn btn-dark px-4">
+                        <i class="fas fa-search me-2"></i> BUSCAR DISPONIBILIDAD
+                    </button>
                 </div>
             </div>
 
-            <div class="form-section">
-                <label class="form-label mb-3">Alojamiento elegido <span class="required-star">*</span></label>
+            <div class="form-section d-none position-relative" id="step3">
+                
+                <div id="searchLoader" class="searching-overlay d-none">
+                    <div class="spinner-border text-primary mb-3" role="status"></div>
+                    <h5 class="text-muted">Verificando calendario en tiempo real...</h5>
+                </div>
 
-                <div class="form-check mb-2">
-                    <input class="form-check-input" type="radio" name="unidad" value="Cabaña 1" id="c1" required>
-                    <label class="form-check-label" for="c1">Cabaña 1 (1 Hab - Con Aire Acond.)</label>
+                <h4 class="mb-4"><i class="fas fa-home text-primary me-2"></i>Paso 2: Elegí tu alojamiento disponible</h4>
+                <p class="text-muted">Resultados para <span id="displayNights" class="fw-bold">0</span> noches y <span id="displayPax" class="fw-bold">0</span> personas.</p>
+                
+                <div class="row g-3" id="cabinResults">
+                    </div>
+
+                <div id="noResultsMsg" class="alert alert-warning d-none mt-3">
+                    <i class="fas fa-exclamation-triangle me-2"></i> No encontramos alojamientos disponibles para esas fechas o capacidad. Por favor intentá con otras fechas.
                 </div>
-                <div class="form-check mb-2">
-                    <input class="form-check-input" type="radio" name="unidad" value="Cabaña 2" id="c2">
-                    <label class="form-check-label" for="c2">Cabaña 2 (2 Hab)</label>
-                </div>
-                <div class="form-check mb-2">
-                    <input class="form-check-input" type="radio" name="unidad" value="Cabaña 3" id="c3">
-                    <label class="form-check-label" for="c3">Cabaña 3 (2 Hab - Con Aire Acond.)</label>
-                </div>
-                <div class="form-check mb-2">
-                    <input class="form-check-input" type="radio" name="unidad" value="Cabaña 4" id="c4">
-                    <label class="form-check-label" for="c4">Cabaña 4 (1 Hab)</label>
-                </div>
-                <div class="form-check mb-2">
-                    <input class="form-check-input" type="radio" name="unidad" value="Cabaña 5" id="c5">
-                    <label class="form-check-label" for="c5">Cabaña 5 (1 Hab)</label>
-                </div>
-                <div class="form-check mb-2">
-                    <input class="form-check-input" type="radio" name="unidad" value="Cabaña 6" id="c6">
-                    <label class="form-check-label" for="c6">Cabaña 6 (2 Hab)</label>
-                </div>
-                <div class="form-check mb-2">
-                    <input class="form-check-input" type="radio" name="unidad" value="Cabaña 7" id="c7">
-                    <label class="form-check-label" for="c7">Cabaña 7 (2 Hab)</label>
-                </div>
-                <div class="form-check mb-2">
-                    <input class="form-check-input" type="radio" name="unidad" value="Cabaña 8" id="c8">
-                    <label class="form-check-label" for="c8">Cabaña 8 (1 Hab)</label>
-                </div>
-                <div class="form-check mb-2">
-                    <input class="form-check-input" type="radio" name="unidad" value="Depto 1" id="d1">
-                    <label class="form-check-label" for="d1">Departamento 1 (Hasta 6 pax)</label>
-                </div>
-                <div class="form-check mb-2">
-                    <input class="form-check-input" type="radio" name="unidad" value="Depto 2" id="d2">
-                    <label class="form-check-label" for="d2">Departamento 2 (Hasta 6 pax)</label>
-                </div>
+                
+                <input type="hidden" name="unidad" id="selectedUnidad" required>
+                <input type="hidden" name="precio_total" id="selectedPrice">
             </div>
 
-            <div class="form-section">
-                <label class="form-label mb-3">Distribución de camas <span class="required-star">*</span></label>
+            <div class="form-section d-none" id="step4">
+                <h4 class="mb-4"><i class="fas fa-user-check text-primary me-2"></i>Paso 3: Confirmar Datos</h4>
+                
+                <input type="hidden" name="hora_out" value="10:00">
 
-                <div class="form-check mb-2">
-                    <input class="form-check-input" type="radio" name="camas" value="2 camas dobles" id="cam1" required>
-                    <label class="form-check-label" for="cam1">2 camas dobles</label>
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Nombre y Apellido <span class="required-star">*</span></label>
+                        <input type="text" class="form-control" name="nombre" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Teléfono (con whatsapp) <span class="required-star">*</span></label>
+                        <input type="tel" class="form-control" name="telefono" required>
+                    </div>
+                    <div class="col-md-12">
+                        <label class="form-label">E-mail <span class="required-star">*</span></label>
+                        <input type="email" class="form-control" name="email" required>
+                    </div>
                 </div>
-                <div class="form-check mb-2">
-                    <input class="form-check-input" type="radio" name="camas" value="1 cama doble, 2 individuales" id="cam2">
-                    <label class="form-check-label" for="cam2">1 cama doble, 2 individuales</label>
-                </div>
-                <div class="form-check mb-2">
-                    <input class="form-check-input" type="radio" name="camas" value="4 camas individuales" id="cam3">
-                    <label class="form-check-label" for="cam3">4 camas individuales</label>
-                </div>
-                <div class="form-check mb-2">
-                    <input class="form-check-input" type="radio" name="camas" value="Otro" id="cam4">
-                    <label class="form-check-label" for="cam4">Otro (Especificar en comentarios)</label>
-                </div>
-            </div>
 
-            <div class="form-section">
-                <div class="mb-3">
-                    <label class="form-label">Comentarios</label>
-                    <textarea class="form-control" name="comentarios" rows="3" placeholder="Tu respuesta"></textarea>
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Horario de llegada aprox (Check-in 13hs)</label>
+                        <input type="time" class="form-control" name="hora_in" value="13:00">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Distribución de camas</label>
+                        <select class="form-select" name="camas">
+                            <option value="2 camas dobles">2 camas dobles</option>
+                            <option value="1 doble + 2 simples">1 doble + 2 simples</option>
+                            <option value="4 simples">4 simples</option>
+                            <option value="Otro">Otro (Aclarar en comentarios)</option>
+                        </select>
+                    </div>
                 </div>
-            </div>
 
-            <div class="text-center pb-5">
-                <button type="submit" class="btn btn-primary btn-lg w-100" id="btnEnviar">ENVIAR COMPROBANTE DE PAGO</button>
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Niños (Edad y Cantidad)</label>
+                        <input type="text" class="form-control" name="ninos" placeholder="Ej: 2 niños de 4 y 8 años">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Mascotas</label>
+                        <input type="text" class="form-control" name="mascotas" placeholder="Ej: No / 1 Perro caniche">
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">Comentarios Adicionales</label>
+                    <textarea class="form-control" name="comentarios" rows="2" placeholder="Mensaje opcional..."></textarea>
+                </div>
+
+                <div class="payment-box mb-4">
+                    <h5 class="text-success mb-3"><i class="fas fa-wallet me-2"></i>Información para la Seña</h5>
+                    <p>Esta es una <strong>Pre-Reserva</strong>. Para confirmarla y bloquear la fecha, es necesario abonar el valor de <strong>1 noche</strong> como seña.</p>
+                    <p>Por favor, realizá la transferencia al siguiente alias:</p>
+                    
+                    <div class="text-center my-3">
+                        <span class="alias-text">VISTA.ANDES.MZA</span>
+                    </div>
+                    
+                    <p class="mb-0 small">Una vez enviado este formulario, mandanos el comprobante por WhatsApp para finalizar la reserva.</p>
+                </div>
+
+                <div class="text-center pb-3">
+                    <button type="submit" class="btn btn-primary btn-lg w-100 py-3 shadow" id="btnEnviar">
+                        ENVIAR SOLICITUD DE RESERVA
+                    </button>
+                </div>
             </div>
 
         </form>
 
         <div id="mensajeExito" class="form-section text-center d-none">
             <i class="fas fa-check-circle text-success fa-4x mb-3"></i>
-            <h3 class="mb-3">¡Datos Recibidos!</h3>
-            
-            <p>Ya recibimos tu formulario.</p>
-            <div class="alert alert-info border-info">
-                <strong>Último paso:</strong><br>
-                Si ya hiciste el pago, por favor enviá el comprobante por WhatsApp para que podamos bloquear la fecha.
+            <h3>¡Solicitud Recibida!</h3>
+            <p class="lead">Gracias por elegir Vista Andes.</p>
+            <div class="alert alert-info d-inline-block text-start">
+                <strong>Siguientes pasos:</strong>
+                <ul class="mb-0 ps-3">
+                    <li>Si ya enviaste la seña, enviá el comprobante por WhatsApp.</li>
+                    <li>Te enviaremos la confirmación definitiva a la brevedad.</li>
+                </ul>
             </div>
-
-            <div class="d-grid gap-3 col-md-8 mx-auto mt-4">
-                <a href="https://wa.me/5492613665439" target="_blank" class="btn btn-success btn-lg py-3 shadow">
-                    <i class="fab fa-whatsapp me-2"></i> ENVIAR COMPROBANTE AHORA
+            <div class="mt-4">
+                <a href="https://wa.me/5492613665439" target="_blank" class="btn btn-success btn-lg">
+                    <i class="fab fa-whatsapp me-2"></i> Enviar Comprobante Ahora
                 </a>
             </div>
-            
-            <hr class="my-4">
-            <a href="index.html" class="btn btn-outline-dark">Volver al Inicio</a>
+            <br>
+            <a href="index.html" class="btn btn-link text-muted mt-3">Volver al Inicio</a>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/b
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // URL DE TU DEPLOYMENT DE APPS SCRIPT
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby-yhNrK8MTwd3MF6lCG3WHSA0z20rC_HIdeg-XA3bl8pLaS8StgUY-jgviaZx67ZC2/exec'; 
+
+        // --- LÓGICA DE PRECIOS ---
+        const pricingRules = {
+            base_1hab: { // Cabañas 4, 5, 8
+                pax_1_3: [75000, 70000, 65000, 55000],
+                pax_4:   [80000, 75000, 70000, 60000]
+            },
+            base_2hab: { // Cabañas 2, 6, 7 (Base + 5000)
+                pax_1_3: [80000, 75000, 70000, 60000],
+                pax_4:   [85000, 80000, 75000, 65000]
+            },
+            ac_1hab: { // Cabaña 1 (AC)
+                pax_1_3: [83000, 78000, 73000, 63000],
+                pax_4:   [88000, 83000, 78000, 68000]
+            },
+            ac_2hab: { // Cabaña 3 (AC)
+                pax_1_3: [88000, 83000, 78000, 68000],
+                pax_4:   [93000, 88000, 83000, 73000]
+            },
+            depto: { // Casas 1 y 2
+                fixed: [85000, 80000, 75000, 65000] 
+            }
+        };
+
+        const cabins = [
+            { id: "Cabaña 1", type: "ac_1hab", name: "Cabaña 1 (1 Hab - Con A/C)", maxPax: 4, img: "assets/img/cabanas/cabana1/foto1.jpeg" },
+            { id: "Cabaña 2", type: "base_2hab", name: "Cabaña 2 (2 Hab)", maxPax: 4, img: "assets/img/cabanas/cabana2/foto1.jpeg" },
+            { id: "Cabaña 3", type: "ac_2hab", name: "Cabaña 3 (2 Hab - Con A/C)", maxPax: 4, img: "assets/img/cabanas/cabana3/foto1.jpeg" },
+            { id: "Cabaña 4", type: "base_1hab", name: "Cabaña 4 (1 Hab)", maxPax: 4, img: "assets/img/cabanas/cabana4/foto1.jpeg" },
+            { id: "Cabaña 5", type: "base_1hab", name: "Cabaña 5 (1 Hab)", maxPax: 4, img: "assets/img/cabanas/cabana5/foto1.jpeg" },
+            { id: "Cabaña 6", type: "base_2hab", name: "Cabaña 6 (2 Hab)", maxPax: 4, img: "assets/img/cabanas/cabana6/foto1.jpeg" },
+            { id: "Cabaña 7", type: "base_2hab", name: "Cabaña 7 (2 Hab)", maxPax: 4, img: "assets/img/cabanas/cabana7/foto1.jpeg" },
+            { id: "Cabaña 8", type: "base_1hab", name: "Cabaña 8 (1 Hab)", maxPax: 4, img: "assets/img/cabanas/cabana8/foto1.jpeg" },
+            // Nombres ajustados para el script
+            { id: "Casa 1", type: "depto", name: "Casa 1 (Loft)", maxPax: 6, minPax: 1, img: "assets/img/departamentos/depto1/foto1.jpg" },
+            { id: "Casa 2", type: "depto", name: "Casa 2 (Loft)", maxPax: 6, minPax: 1, img: "assets/img/departamentos/depto2/foto1.jpg" }
+        ];
+
+        // Elementos DOM
+        const inputEntrada = document.getElementById('inputEntrada');
+        const inputSalida = document.getElementById('inputSalida');
+        const inputPax = document.getElementById('inputPax');
+        const btnBuscar = document.getElementById('btnBuscar');
+        const step3 = document.getElementById('step3');
+        const step4 = document.getElementById('step4');
+        const cabinResults = document.getElementById('cabinResults');
+        const displayNights = document.getElementById('displayNights');
+        const displayPax = document.getElementById('displayPax');
+        const selectedUnidad = document.getElementById('selectedUnidad');
+        const selectedPrice = document.getElementById('selectedPrice');
+        const searchLoader = document.getElementById('searchLoader');
+        const noResultsMsg = document.getElementById('noResultsMsg');
+
+        // BOTÓN BUSCAR
+        btnBuscar.addEventListener('click', async () => {
+            const inDateVal = inputEntrada.value;
+            const outDateVal = inputSalida.value;
+            const pax = parseInt(inputPax.value);
+
+            // Validaciones básicas
+            if (!inDateVal || !outDateVal) {
+                alert("Por favor seleccioná fechas de entrada y salida.");
+                return;
+            }
+            if (new Date(outDateVal) <= new Date(inDateVal)) {
+                document.getElementById('alertFechas').classList.remove('d-none');
+                return;
+            } else {
+                document.getElementById('alertFechas').classList.add('d-none');
+            }
+
+            // Mostrar Loader y Ocultar pasos anteriores
+            step3.classList.remove('d-none');
+            searchLoader.classList.remove('d-none');
+            cabinResults.innerHTML = ''; 
+            step4.classList.add('d-none');
+            noResultsMsg.classList.add('d-none');
+
+            // 1. Consultar a Google Calendar (Apps Script)
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST', // Usamos POST para enviar datos
+                    body: JSON.stringify({
+                        action: 'check_availability',
+                        checkIn: inDateVal,
+                        checkOut: outDateVal
+                    })
+                });
+                const data = await response.json();
+                
+                // Lista de cabañas ocupadas que devolvió el calendario
+                const occupiedCabins = data.occupied || [];
+                
+                console.log("Ocupadas según calendario:", occupiedCabins);
+
+                // Calcular noches
+                const inDate = new Date(inDateVal);
+                const outDate = new Date(outDateVal);
+                const diffTime = Math.abs(outDate - inDate);
+                const nights = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                // 2. Renderizar Cabañas (Filtrando las ocupadas)
+                renderCabins(nights, pax, occupiedCabins);
+
+            } catch (error) {
+                console.error("Error consultando calendario:", error);
+                alert("Hubo un error verificando disponibilidad. Intente nuevamente.");
+            } finally {
+                searchLoader.classList.add('d-none');
+            }
+        });
+
+        function getRateIndex(nights) {
+            if (nights === 1) return 0;
+            if (nights >= 2 && nights <= 4) return 1;
+            if (nights >= 5 && nights <= 9) return 2;
+            if (nights >= 10) return 3;
+            return 0;
+        }
+
+        function formatMoney(amount) {
+            return "$" + amount.toLocaleString('es-AR');
+        }
+
+        function renderCabins(nights, pax, occupiedList) {
+            displayNights.innerText = nights;
+            displayPax.innerText = pax;
+            
+            let visibleCount = 0;
+            const rateIndex = getRateIndex(nights);
+
+            cabins.forEach(cabin => {
+                // Filtro 1: Capacidad
+                if (pax > cabin.maxPax) return; 
+
+                // Filtro 2: ¿Está ocupada en el calendario?
+                // Si el ID de la cabaña está en la lista de ocupadas, LA SALTAMOS (no se muestra)
+                if (occupiedList.includes(cabin.id)) return;
+
+                // Calculo Precio
+                let pricePerNight = 0;
+                if (cabin.type === 'depto') {
+                    pricePerNight = pricingRules.depto.fixed[rateIndex];
+                } else {
+                    if (pax <= 3) {
+                        pricePerNight = pricingRules[cabin.type].pax_1_3[rateIndex];
+                    } else {
+                        pricePerNight = pricingRules[cabin.type].pax_4[rateIndex];
+                    }
+                }
+                const totalPrice = pricePerNight * nights;
+
+                // Crear HTML
+                const col = document.createElement('div');
+                col.className = 'col-md-6 col-lg-4';
+                col.innerHTML = `
+                    <div class="card cabin-select-card" onclick="selectCabin(this, '${cabin.id}', ${totalPrice})">
+                        <img src="${cabin.img}" class="card-img-top" style="height: 200px; object-fit: cover;" alt="${cabin.name}">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">${cabin.name}</h5>
+                            <p class="card-text small text-muted mb-2">Capacidad máx: ${cabin.maxPax} personas</p>
+                            <div class="text-end mt-3">
+                                <span class="d-block small text-muted">Precio por noche: ${formatMoney(pricePerNight)}</span>
+                                <span class="cabin-price-tag">${formatMoney(totalPrice)}</span>
+                                <span class="cabin-total-nights d-block">Total por ${nights} noches</span>
+                            </div>
+                            <button class="btn btn-outline-danger w-100 mt-3 btn-select-label">SELECCIONAR</button>
+                        </div>
+                    </div>
+                `;
+                cabinResults.appendChild(col);
+                visibleCount++;
+            });
+
+            if (visibleCount === 0) {
+                noResultsMsg.classList.remove('d-none');
+            }
+        }
+
+        window.selectCabin = function(cardElement, cabinId, price) {
+            // Remover selección previa
+            document.querySelectorAll('.cabin-select-card').forEach(c => {
+                c.classList.remove('selected');
+                c.querySelector('.btn-select-label').innerText = "SELECCIONAR";
+                c.querySelector('.btn-select-label').classList.remove('btn-danger');
+                c.querySelector('.btn-select-label').classList.add('btn-outline-danger');
+            });
+
+            // Activar actual
+            cardElement.classList.add('selected');
+            const btn = cardElement.querySelector('.btn-select-label');
+            btn.innerText = "SELECCIONADO";
+            btn.classList.remove('btn-outline-danger');
+            btn.classList.add('btn-danger');
+
+            // Guardar datos
+            selectedUnidad.value = cabinId;
+            selectedPrice.value = price;
+
+            // Mostrar siguiente paso
+            step4.classList.remove('d-none');
+            step4.scrollIntoView({ behavior: 'smooth' });
+        };
+
+        // --- ENVÍO DE FORMULARIO ---
+        const form = document.getElementById('reservaForm');
+        const btnEnviar = document.getElementById('btnEnviar');
+        const msg = document.getElementById('mensajeExito');
+
+        form.addEventListener('submit', e => {
+            e.preventDefault();
+            btnEnviar.disabled = true;
+            btnEnviar.innerText = "Procesando...";
+
+            const formData = new FormData(form);
+            const data = {};
+            formData.forEach((value, key) => data[key] = value);
+            
+            // Añadimos la acción 'book' para que el script sepa que debe guardar
+            data.action = 'book';
+
+            fetch(SCRIPT_URL, {
+                method: 'POST',
+                body: JSON.stringify(data)
+            })
+            .then(res => res.json())
+            .then(response => {
+                if(response.result === 'success'){
+                    form.classList.add('d-none');
+                    document.querySelector('.text-center.mb-5').style.display = 'none'; // Ocultar título
+                    msg.classList.remove('d-none');
+                    window.scrollTo(0,0);
+                } else {
+                    alert("Error: " + response.message);
+                    btnEnviar.disabled = false;
+                    btnEnviar.innerText = "ENVIAR SOLICITUD DE RESERVA";
+                }
+            })
+            .catch(err => {
+                alert("Hubo un error de conexión.");
+                btnEnviar.disabled = false;
+                btnEnviar.innerText = "ENVIAR SOLICITUD DE RESERVA";
+            });
+        });
+    </script>
+</body>
+</html>
